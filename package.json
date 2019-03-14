@@ -5,7 +5,24 @@
   "dependencies": {
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "mobx": "latest",
+    "mobx-react": "latest",
+    "@material-ui/styles": "latest",
+    "@material-ui/core": "latest",
+    "@emotion/core": "^10.0.7",
+    "@emotion/styled": "latest",
+    "emotion-theming": "latest",
+    "react-jss": "latest",
+    "@material-ui/icons": "latest"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/react": "^16.8.7",
+    "@types/react-dom": "^16.8.2",
+    "@types/react-jss": "^8.6.3",
+    "prettier": "^1.16.4",
+    "typescript": "^3.3.3333"
   },
   "scripts": {
     "start": "react-scripts start",
