@@ -175,7 +175,7 @@ export class MemberPrimary extends Member {
   }
 }
 
-export class Todo {
+export class Store {
   @observable member = new MemberPrimary();
   @observable spouses: Member[] = [];
   @action.bound validate() {

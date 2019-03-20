@@ -4,7 +4,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "./bootstrap";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import { Todo } from "./store";
+import { Store } from "./store";
 import { ThemeProvider as Tp2 } from "emotion-theming";
 import JssProvider from "react-jss/lib/JssProvider";
 import { create } from "jss";
@@ -27,7 +27,7 @@ let theme = createMuiTheme({
 ReactDOM.render(
   <JssProvider jss={jss} generateClassName={generateClassName}>
     <Tp2 theme={theme}>
-      <App test={new Todo()} />
+      <App store={new Store()} />
     </Tp2>
   </JssProvider>,
   document.getElementById("root")

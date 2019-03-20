@@ -1,11 +1,8 @@
-// language=SCSS
-// language=SCSS
-// language=SCSS
 import styled from "@emotion/styled";
 import FormControl from "@material-ui/core/FormControl";
 import React from "react";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { CheckboxInput } from "./store";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";

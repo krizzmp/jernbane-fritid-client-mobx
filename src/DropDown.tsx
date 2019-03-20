@@ -1,5 +1,5 @@
-import { observer } from "mobx-react";
-import React from "react";
+import { observer } from "mobx-react-lite";
+import React, { useEffect, useRef, useState } from "react";
 import { MultiInput } from "./store";
 import InputLabel from "@material-ui/core/InputLabel";
 import * as ReactDOM from "react-dom";
@@ -10,7 +10,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import styled from "@emotion/styled";
 import FormControl from "@material-ui/core/FormControl";
 
-const FormControl1 = styled(({ color, ...other }) => (
+const FormControl1 = styled((other) => (
   <FormControl {...other} />
 ))`
   & {
@@ -20,52 +20,46 @@ const FormControl1 = styled(({ color, ...other }) => (
   }
 `;
 
-@observer
-export class DropDown extends React.Component<{ src: MultiInput; multiple: boolean }> {
-  static defaultProps = { multiple: false };
-  state = { labelWidth: 0 };
-  inputLabelRef: React.RefObject<InputLabel> = React.createRef();
-
-  componentWillReact () {
-    let domNode = ReactDOM.findDOMNode(
-      this.inputLabelRef.current
-    ) as HTMLLabelElement;
-    this.setState({
-      labelWidth: domNode.offsetWidth
-    });
-  }
-
-  render () {
+export const DropDown = observer(
+  ({ src, multiple = false }: { src: MultiInput; multiple?: boolean }) => {
+    const [labelWidth, set_labelWidth] = useState(0);
+    const inputLabelRef = useRef(null as InputLabel | null);
+    useEffect(() => {
+      set_labelWidth(
+        (ReactDOM.findDOMNode(inputLabelRef.current) as HTMLLabelElement)
+          .offsetWidth
+      );
+    }, [src.label]);
     return (
-      <FormControl1 variant="outlined" error={!!this.props.src.error}>
-        <InputLabel ref={this.inputLabelRef} htmlFor={this.props.src.id}>
-          {this.props.src.label}
+      <FormControl1 variant="outlined" error={!!src.error}>
+        <InputLabel ref={inputLabelRef} htmlFor={src.id}>
+          {src.label}
         </InputLabel>
         <Select
-          multiple={this.props.multiple}
+          multiple={multiple}
           fullWidth
-          value={this.props.src.value}
+          value={src.value}
           onChange={e =>
-            (this.props.src.value = (e.target.value as unknown) as string[])
+            (src.value = (e.target.value as unknown) as string[])
           }
           input={
             <OutlinedInput
-              labelWidth={this.state.labelWidth}
-              name={this.props.src.label}
-              id={this.props.src.id}
+              labelWidth={labelWidth}
+              name={src.label}
+              id={src.id}
             />
           }
         >
-          {this.props.src.items.map(name => (
+          {src.items.map(name => (
             <MenuItem key={name} value={name}>
               {name}
             </MenuItem>
           ))}
         </Select>
         <FormHelperText>
-          {this.props.src.error || this.props.src.description}
+          {src.error || src.description}
         </FormHelperText>
       </FormControl1>
     );
   }
-}
+);
