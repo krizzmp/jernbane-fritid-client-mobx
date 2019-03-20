@@ -1,5 +1,5 @@
-import { action, computed, observable } from "mobx";
-
+import { action, computed, observable, runInAction } from "mobx";
+import axios from "axios";
 interface Validatable {
   validate(): boolean;
 }
@@ -99,25 +99,29 @@ export class Member implements Validatable {
     label: "cpr",
     description: "this is cpr",
     changeValidator: cprChangeValidator,
-    submitValidator: requiredValidator
+    submitValidator: requiredValidator,
+    defaultValue:"0000000000"
   });
   @observable name = new TextInput({
     label: "name",
     description: "name",
     changeValidator: nameChangeValidator,
-    submitValidator: requiredValidator
+    submitValidator: requiredValidator,
+    defaultValue:"kmp"
   });
   @observable memberships = new MultiInput({
     label: "memberships",
     description: "this is memberships",
     items: ["a", "b", "c"],
-    submitValidator: notEmptyValidator
+    submitValidator: notEmptyValidator,
+    defaultValue:["a"]
   });
   @observable payment = new MultiInput({
     label: "payment",
     description: "this is a payment",
     items: ["a", "b", "c"],
-    submitValidator: notEmptyValidator
+    submitValidator: notEmptyValidator,
+    defaultValue:["a"]
   });
 
   @action validate(): boolean {
@@ -137,17 +141,21 @@ export class MemberPrimary extends Member {
   @observable address = new TextInput({
     label: "address",
     description: "this is an address",
-    submitValidator: requiredValidator
+    submitValidator: requiredValidator,
+    defaultValue:"addr"
   });
   @observable email = new TextInput({
     label: "email",
     description: "this is an email",
     submitValidator: requiredValidator
+    ,
+    defaultValue:"kmp@kmp.vom"
   });
   @observable phone = new TextInput({
     label: "phone",
     description: "this is an phone",
-    submitValidator: requiredValidator
+    submitValidator: requiredValidator,
+    defaultValue:"20272805"
   });
   @observable magazine = new CheckboxInput({
     label: "magazine",
@@ -178,6 +186,8 @@ export class MemberPrimary extends Member {
 export class Store {
   @observable member = new MemberPrimary();
   @observable spouses: Member[] = [];
+  @observable completed: boolean = false;
+  @observable error: boolean = false;
   @action.bound validate() {
     return validateAll([this.member, ...this.spouses]);
   }
@@ -188,6 +198,22 @@ export class Store {
 
   @action.bound removeSpouse(i: number) {
     this.spouses.splice(i, 1);
+  }
+  @action.bound
+  async submit() {
+    if (this.validate()) return;
+    try {
+      await axios.post("https://localhost:5001/createMembers", this.toJson());
+      runInAction(() => {
+        this.completed = true;
+      });
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.completed = false;
+        this.error = true;
+      });
+    }
   }
   toJson() {
     return {

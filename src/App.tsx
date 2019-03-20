@@ -85,6 +85,7 @@ function App(props: { store: Store }) {
   const [expandedIndex, set_expandedIndex] = useState(-1);
   return (
     <div className="App">
+      {props.store.error&&"error"}
       <PrimaryMemberView
         test={props.store.member}
         isExpanded={expandedIndex === -1}
@@ -118,7 +119,7 @@ function App(props: { store: Store }) {
         <Button
           variant="contained"
           color="primary"
-          onClick={props.store.validate}
+          onClick={props.store.submit}
         >
           Submit
         </Button>
