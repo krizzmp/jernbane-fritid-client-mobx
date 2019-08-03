@@ -17,6 +17,7 @@ const PrimaryMemberView = observer(
     isExpanded: boolean;
     onToggleExpand: (event: React.ChangeEvent<{}>, expanded: boolean) => void;
   }) => {
+    // <div> hello </div>
     return (
       <ExpansionPanel
         expanded={props.isExpanded}
@@ -35,6 +36,7 @@ const PrimaryMemberView = observer(
           <Input src={props.test.address} />
           <Input src={props.test.email} />
           <Input src={props.test.phone} />
+          <DropDown src={props.test.company} />
           <CheckBox src={props.test.magazine} />
           <DropDown src={props.test.memberships} multiple={true} />
           <DropDown src={props.test.payment} />

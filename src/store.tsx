@@ -100,28 +100,28 @@ export class Member implements Validatable {
     description: "this is cpr",
     changeValidator: cprChangeValidator,
     submitValidator: requiredValidator,
-    defaultValue:"0000000000"
+    defaultValue:""
   });
   @observable name = new TextInput({
     label: "name",
     description: "name",
     changeValidator: nameChangeValidator,
     submitValidator: requiredValidator,
-    defaultValue:"kmp"
+    defaultValue:""
   });
   @observable memberships = new MultiInput({
     label: "memberships",
     description: "this is memberships",
     items: ["a", "b", "c"],
     submitValidator: notEmptyValidator,
-    defaultValue:["a"]
+    defaultValue:[]
   });
   @observable payment = new MultiInput({
     label: "payment",
     description: "this is a payment",
     items: ["a", "b", "c"],
     submitValidator: notEmptyValidator,
-    defaultValue:["a"]
+    defaultValue:[]
   });
 
   @action validate(): boolean {
@@ -132,7 +132,7 @@ export class Member implements Validatable {
       cpr: this.cpr.value,
       name: this.name.value,
       memberships: this.memberships.value,
-      payment: this.payment.value
+      payment: this.payment.value[0]
     };
   }
 }
@@ -142,20 +142,27 @@ export class MemberPrimary extends Member {
     label: "address",
     description: "this is an address",
     submitValidator: requiredValidator,
-    defaultValue:"addr"
+    defaultValue:""
   });
   @observable email = new TextInput({
     label: "email",
     description: "this is an email",
     submitValidator: requiredValidator
     ,
-    defaultValue:"kmp@kmp.vom"
+    defaultValue:""
   });
   @observable phone = new TextInput({
     label: "phone",
     description: "this is an phone",
     submitValidator: requiredValidator,
-    defaultValue:"20272805"
+    defaultValue:""
+  });
+  @observable company = new MultiInput({
+    label: "company",
+    description: "this is a company",
+    items: ["a", "b", "c"],
+    submitValidator: notEmptyValidator,
+    defaultValue:[]
   });
   @observable magazine = new CheckboxInput({
     label: "magazine",
@@ -168,7 +175,8 @@ export class MemberPrimary extends Member {
       this.address,
       this.email,
       this.phone,
-      this.magazine
+      this.magazine,
+      this.company
     ]);
     return t || s;
   }
@@ -179,6 +187,7 @@ export class MemberPrimary extends Member {
       email: this.email.value,
       phone: this.phone.value,
       magazine: this.magazine.value
+      ,company: this.company.value[0]
     };
   }
 }
@@ -206,10 +215,11 @@ export class Store {
       await axios.post("https://localhost:5001/createMembers", this.toJson());
       runInAction(() => {
         this.completed = true;
+        this.error = false;
       });
     } catch (error) {
       runInAction(() => {
-        console.log(error);
+        console.log(error.response);
         this.completed = false;
         this.error = true;
       });
