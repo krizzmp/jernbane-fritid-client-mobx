@@ -8,7 +8,7 @@
     "@material-ui/core": "latest",
     "@material-ui/icons": "latest",
     "@material-ui/styles": "latest",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "emotion-theming": "latest",
     "mobx": "latest",
     "mobx-react": "latest",
